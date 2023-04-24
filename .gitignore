@@ -1,0 +1,5 @@
+emacs/auto-save-list
+emacs/projects
+emacs/straight
+emacs/transient
+nvim/plugin

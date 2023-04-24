@@ -1,0 +1,13 @@
+[user]
+	email = qufei.wang@zimpler.com
+	name = qufei
+[url "git@gitlab.zimpler.com:"]
+	insteadOf = https://gitlab.zimpler.com/
+[core]
+	editor = vim
+[pull]
+	rebase = true
+[fetch]
+	prune = true
+[diff]
+	colorMoved = zebra
