@@ -1,0 +1,4 @@
+extension-manager
+google-chrome
+yay
+yay-debug

@@ -1,0 +1,9 @@
+[user]
+	name = Qufei
+	email = qufei.wang@zimpler.com
+[core]
+	editor = vim
+[url "ssh://git@gitlab.tooling.zimpler.net:"]
+  insteadOf = https://gitlab.tooling.zimpler.net
+[pull]
+	rebase = true

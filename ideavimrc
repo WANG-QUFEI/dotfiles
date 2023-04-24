@@ -1,0 +1,109 @@
+let mapleader = " "
+set scrolloff=5
+set nu rnu
+set showmode
+set showcmd
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set visualbell
+" Use system clipboard
+set clipboard+=unnamed   
+
+"" Plugin Settings
+"" ========================================================
+set surround
+set highlightedyank
+set sneak
+set nerdtree
+set notimeout
+set which-key
+
+let g:EasyMotion_smartcase = 1
+set easymotion
+set notimeout
+
+"" Key mappings
+"" ========================================================
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+nmap <C-x><C-s> <Action>(SaveAll)
+
+" Tab navigation
+nnoremap ]b :tabnext<CR>
+nnoremap [b :tabprev<CR>
+
+" Easy Motion
+map <leader>j <Plug>(easymotion-s) 
+map \j <Plug>(easymotion-j)
+map \k <Plug>(easymotion-k)
+
+" Jump between methods
+nmap [[ <Action>(MethodUp)
+nmap ]] <Action>(MethodDown)
+
+" Execute macro saved in 'q' register
+nnoremap qj @q
+
+" Popup navigation
+imap <C-j> <Action>(PopupMenu-selectNext)
+imap <C-k> <Action>(PopupMenu-selectPrev)
+
+" Run program
+map <C-x>r <Action>(RunClass)
+
+" Reload ideavim config
+map <leader>rr :<C-u>source ~/.ideavimrc<CR>
+
+" Comment lines
+map <leader>c <action>(CommentByLineComment)
+
+" Open NERDTree (use q to exit)
+map <leader>tt :NERDTreeToggle<CR>
+map <leader>tf :NERDTreeFind<CR>
+
+" Folding
+map <leader>zc :action CollapseAllRegions<CR>
+map <leader>zo :action ExpandAllRegions<CR>
+
+" Window splits
+map <C-w>u <Action>(Unsplit)
+map <C-w>m <Action>(MoveEditorToOppositeTabGroup)
+
+" Display options
+map <leader>md <action>(ToggleDistractionFreeMode)
+map <leader>mz <action>(ToggleZenMode)
+map <leader>mf <action>(ToggleFullScreen)
+map <leader>ml <action>(EditorToggleShowLineNumbers)
+
+" File navigation
+map <leader>ff <action>(GotoFile)
+map <leader>rf <action>(RecentFiles)
+map <leader>fc <action>(FindInPath)
+map <leader>fl <action>(RecentLocations)
+map <leader>fs <action>(NewScratchFile)
+
+" Close active tab
+map <C-w>c <action>(CloseContent)
+map <C-x>o <action>(CloseAllEditorsButActive)
+
+" Hide active window
+map <C-x>h <action>(HideActiveWindow)
+
+" Refactoring
+map <leader>rn <Action>(RenameElement)
+map <leader>rm <Action>(ExtractMethod)
+map <leader>rv <Action>(IntroduceVariable)
+map <leader>rs <Action>(ChangeSignature)
+map <leader>ra <Action>(Refactorings.QuickListPopupAction)
+
+" Go to code
+nmap gd <Action>(GotoDeclaration)
+nmap gy <Action>(GotoTypeDeclaration)
+nmap gi <Action>(GotoImplementation)
+nmap gr <Action>(ShowUsages)
+nmap gR <Action>(FindUsages)
+nmap gt <Action>(GotoTest)
+nmap <C-o> <Action>(Back)
+nmap <C-i> <Action>(Forward)

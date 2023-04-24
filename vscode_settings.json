@@ -1,0 +1,71 @@
+{
+    "editor.fontFamily": "Ubuntu Mono, Monaco, Comic Mono, 'Droid Sans Mono', 'monospace', monospace",
+    "editor.fontSize": 17,
+    "go.formatTool": "goimports",
+    "go.lintTool": "golangci-lint",
+    "vim.leader": "<space>",
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.hlsearch": true,
+    "vim.insertModeKeyBindings": [],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<C-l>"
+            ],
+            "commands": [
+                ":nohl"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "d"
+            ],
+            "commands": [
+                "editor.action.revealDefinition"
+            ],
+        },
+        {
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "editor.action.goToReferences"
+            ],
+        },
+        {
+            "before": [
+                "<leader>",
+                "r",
+                "n"
+            ],
+            "commands": [
+                "editor.action.rename"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "f",
+                "f"
+            ],
+            "commands": [
+                "workbench.action.quickOpen"
+            ]
+        },
+        {
+            "before": [
+                "<C-w>",
+                "v",
+            ],
+            "commands": [
+                "workbench.action.splitEditorRight"
+            ]
+        },
+    ],
+    "vim.handleKeys": {},
+    "editor.formatOnSave": true
+}
