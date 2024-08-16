@@ -1,71 +1,108 @@
 {
-    "editor.fontFamily": "Ubuntu Mono, Monaco, Comic Mono, 'Droid Sans Mono', 'monospace', monospace",
-    "editor.fontSize": 17,
-    "go.formatTool": "goimports",
-    "go.lintTool": "golangci-lint",
-    "vim.leader": "<space>",
-    "vim.easymotion": true,
-    "vim.incsearch": true,
-    "vim.useSystemClipboard": true,
-    "vim.hlsearch": true,
-    "vim.insertModeKeyBindings": [],
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "<C-l>"
-            ],
-            "commands": [
-                ":nohl"
-            ]
-        },
-        {
-            "before": [
-                "g",
-                "d"
-            ],
-            "commands": [
-                "editor.action.revealDefinition"
-            ],
-        },
-        {
-            "before": [
-                "g",
-                "r"
-            ],
-            "commands": [
-                "editor.action.goToReferences"
-            ],
-        },
-        {
-            "before": [
-                "<leader>",
-                "r",
-                "n"
-            ],
-            "commands": [
-                "editor.action.rename"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "f",
-                "f"
-            ],
-            "commands": [
-                "workbench.action.quickOpen"
-            ]
-        },
-        {
-            "before": [
-                "<C-w>",
-                "v",
-            ],
-            "commands": [
-                "workbench.action.splitEditorRight"
-            ]
-        },
-    ],
-    "vim.handleKeys": {},
-    "editor.formatOnSave": true
+  "editor.lineNumbers": "relative",
+  "vim.easymotion": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": [
+        "j",
+        "j"
+      ],
+      "after": [
+        "<Esc>"
+      ]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "<C-n>"
+      ],
+      "commands": [
+        ":nohl"
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "r"
+      ],
+      "commands": [
+        "references-view.findReferences"
+      ]
+    },
+    {
+      "before": [
+        "g",
+        "i"
+      ],
+      "commands": [
+        "references-view.findImplementations"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "r",
+        "n"
+      ],
+      "commands": [
+        "editor.action.rename"
+      ]
+    },
+  ],
+  "vim.leader": "<space>",
+  "vim.handleKeys": {
+    "<C-a>": false,
+    "<C-f>": false
+  },
+  "extensions.experimental.affinity": {
+    "vscodevim.vim": 1
+  },
+  "editor.fontSize": 14,
+  "redhat.telemetry.enabled": true,
+  "editor.formatOnSave": true,
+  "git.openRepositoryInParentFolders": "never",
+  "editor.fontFamily": "ComicMono, CodeNewRoman Nerd Font, JetBrains Mono, monospace",
+  "editor.fontVariations": true,
+  "git.confirmSync": false,
+  "terminal.integrated.fontSize": 14,
+  "debug.console.fontSize": 15,
+  "chat.editor.fontSize": 14,
+  "git.timeline.showAuthor": false,
+  "gitlens.codeLens.enabled": false,
+  "gitlens.codeLens.authors.enabled": false,
+  "explorer.confirmDelete": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "prettier.tabWidth": 4,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[sql]": {
+    "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+  },
+  "java.jdt.ls.java.home": "/Library/Java/JavaVirtualMachines/jdk-22-macports.jdk/Contents/Home",
+  "java.saveActions.organizeImports": true,
+  "go.formatTool": "goimports",
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "files.watcherExclude": {
+    "**/.bloop": true,
+    "**/.metals": true,
+    "**/.ammonite": true
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "workbench.startupEditor": "none",
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-dark",
+  "explorer.confirmDragAndDrop": false,
 }

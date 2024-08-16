@@ -21,7 +21,8 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (electric-pair-mode 1)
-(set-face-attribute 'default nil :family "BlexMono Nerd Font" :slant 'italic :height 150)
+(set-face-attribute 'default nil :family "IBM Plex Mono" :slant 'italic :height 140 :weight 'medium)
+;; (set-face-attribute 'default nil :family "BlexMono Nerd Font" :slant 'italic :height 140 :weight 'semi-bold)
 (global-display-line-numbers-mode 1)
 (recentf-mode)
 (add-hook 'text-mode-hook #'auto-fill-mode)
@@ -33,26 +34,14 @@
 (setq-default tab-width 4)
 (setq inhibit-splash-screen t)
 (setq c-basic-offset 4)
+(setq shell-file-name "/bin/zsh")
 (setq backup-directory-alist '(("." . "~/.config/emacs/backup")))
 (setq-default fill-column 80)
-(setq treesit-language-source-alist
-   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-     (cmake "https://github.com/uyha/tree-sitter-cmake")
-     (css "https://github.com/tree-sitter/tree-sitter-css")
-     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-     (go "https://github.com/tree-sitter/tree-sitter-go")
-     (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
-     (html "https://github.com/tree-sitter/tree-sitter-html")
-     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-     (json "https://github.com/tree-sitter/tree-sitter-json")
-     (make "https://github.com/alemuller/tree-sitter-make")
-     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-     (python "https://github.com/tree-sitter/tree-sitter-python")
-     (toml "https://github.com/tree-sitter/tree-sitter-toml")
-     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+(global-set-key (kbd "s-C-h") 'shrink-window-horizontally)
+(global-set-key (kbd "s-C-l") 'enlarge-window-horizontally)
+(global-set-key (kbd "s-C-j") 'shrink-window)
+(global-set-key (kbd "s-C-k") 'enlarge-window)
 
 (defun kill-other-buffers ()
 	"Kill all other buffers."
@@ -70,6 +59,8 @@
 
 (use-package general)
 
+(use-package fish-mode)
+
 (use-package markdown-mode
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown"))
@@ -82,14 +73,15 @@
   :config
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-dracula t)
+  ;; (load-theme 'doom-dracula t)
+  (load-theme 'doom-moonlight t)
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
   ;; use "doom-colors" for less minimal icon theme
-  ;; (setq doom-themes-treemacs-theme "doom-atom") 
+  (setq doom-themes-treemacs-theme "doom-atom") 
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
@@ -101,6 +93,8 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 ;; --------------------------------------------------------------------------------------------------
+(use-package dotenv-mode)
+
 (use-package evil
   :init
   (setq evil-want-integration t)
@@ -140,7 +134,8 @@
   (setq corfu-cycle t)
   (setq corfu-separator ?\s)
   :init
-  (global-corfu-mode 1))
+  ;; (global-corfu-mode 1)
+  )
 
 (use-package ssh-agency)
 
@@ -165,6 +160,13 @@
 (use-package magit)
 
 (use-package flycheck)
+
+(use-package flycheck-typescript-tslint
+  :after (flycheck)
+  :ensure t
+  :config
+  (flycheck-add-mode 'typescript-tslint 'web-mode)
+  (flycheck-add-mode 'typescript-tslint 'typescript-mode))
 
 (use-package which-key
   :config (which-key-mode))
@@ -220,21 +222,19 @@
 (use-package ace-jump-mode)
 
 (use-package company
-  ; :config
-  ; (add-hook 'after-init-hook #'global-company-mode)
-  )
+  :ensure t
+  :hook (after-init . global-company-mode)
+  :config
+  (setq company-tooltip-align-annotations t)
+  (setq company-minimum-prefix-length 1)
+  (setq company-idle-delay 0.2)) ;; No delay in showing suggestions
+
+(use-package company-web
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-web-html))
 
 (use-package quickrun)
-
-(defun tree-sitter-prog-mode-enable ()
-  (add-hook 'prog-mode-hook 'tree-sitter-mode)
-  (add-hook 'prog-mode-hook 'tree-sitter-hl-mode))
-
-(use-package tree-sitter
-  :config
-  (add-hook 'after-init-hook #'tree-sitter-prog-mode-enable))
-
-(use-package tree-sitter-langs)
 
 (use-package helm-lsp)
 
@@ -251,8 +251,8 @@
 (use-package haskell-snippets)
 
 (use-package yasnippet
-  :config
-  (yas-global-mode 1))
+  :ensure t
+  :hook (prog-mode . yas-minor-mode))
 
 (use-package yasnippet-snippets)
 
@@ -261,6 +261,10 @@
 (use-package aws-snippets)
 
 (use-package clojure-snippets)
+
+(use-package go-snippets)
+
+(use-package react-snippets)
 ;; --------------------------------------------------------------------------------------------------
 (general-create-definer my-leader-def
   :prefix "SPC")
@@ -288,12 +292,14 @@
   "r n" 'eglot-rename
   "a" 'eglot-code-action-quickfix
   )
+
 ;; --------------------------------------------------------------------------------------------------
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
                '((c-mode c++-mode) . ("clangd"))))
 
-(use-package lsp-mode)
+(use-package lsp-mode
+  :commands (lsp lsp-deferred))
 
 (use-package lsp-treemacs)
 
@@ -340,16 +346,44 @@
 
 (use-package slime
   :config (setq inferior-lisp-program "sbcl"))
+
+(use-package tide
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
+
+(use-package typescript-mode
+  :ensure t
+  :mode ("\\.ts\\'" "\\.tsx\\'")
+  :hook ((typescript-mode . subword-mode)
+         (typescript-mode . electric-pair-mode)
+         (typescript-mode . lsp-deferred)
+		 ))
+
+(use-package web-mode
+  :mode ("\\.js\\'" "\\.jsx\\'" "\\.ts\\'" "\\.tsx\\'")
+  :config
+  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")
+                                       ("tsx" . "\\.ts[x]?\\'")))
+  (setq web-mode-enable-auto-quoting nil) ;; Disable automatic quoting
+  (setq web-mode-markup-indent-offset 4)
+  (setq web-mode-css-indent-offset 4)
+  (setq web-mode-code-indent-offset 4)
+  )
+
+
 ;; --------------------------------------------------------------------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(corfu-min-width 35))
+ '(corfu-min-width 35)
+ '(helm-minibuffer-history-key "M-p"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(corfu-current ((t (:background "light green" :foreground "black")))))
+ '(corfu-current ((t (:background "linkColor" :foreground "alternateSelectedControlTextColor")))))

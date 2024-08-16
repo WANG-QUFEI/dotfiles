@@ -49,6 +49,10 @@ alias git_log_patch='git log -p'
 alias git_log_pretty='git log --pretty=format:"%h %an %ad: %s" --graph'
 alias zpgproxy='PGPROXY_PORT=9987 arthur db pgproxy'
 
+# MacOS related
+defaults write -g InitialKeyRepeat -int 10
+defaults write -g KeyRepeat -int 1
+defaults write com.apple.dock ResetLaunchPad -bool true; killall Doc
 ```
 
 ### go

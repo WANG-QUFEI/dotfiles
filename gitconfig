@@ -1,5 +1,5 @@
 [user]
-	name = Qufei
+	name = 'Qufei'
 	email = qufei.wang@zimpler.com
 [core]
 	editor = vim
@@ -7,3 +7,5 @@
   insteadOf = https://gitlab.tooling.zimpler.net
 [pull]
 	rebase = true
+[safe]
+	directory = /work

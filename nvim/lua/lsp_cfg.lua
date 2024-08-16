@@ -32,7 +32,7 @@ function lsp_cfg.setup()
 
 	local nvim_lsp = require 'lspconfig'
 	local capabilities = require('cmp_nvim_lsp').default_capabilities()
-	local server_names = { 'gopls', 'clangd', 'tsserver', 'lua_ls', 'java_language_server', 'pyright' }
+	local server_names = { 'gopls', 'clangd', 'ts_ls', 'lua_ls', 'java_language_server', 'pyright' }
 	for _, server in ipairs(server_names) do
 		if server == 'lua_ls' then
 			nvim_lsp['lua_ls'].setup {
