@@ -1,0 +1,224 @@
+{ config, pkgs, ... }:
+
+{
+  # Home Manager needs a bit of information about you and the paths it should
+  # manage.
+  home.username = "qufei";
+  home.homeDirectory = "/Users/qufei";
+
+  # This value determines the Home Manager release that your configuration is
+  # compatible with. This helps avoid breakage when a new Home Manager release
+  # introduces backwards incompatible changes.
+  #
+  # You should not change this value, even if you update Home Manager. If you do
+  # want to update the value, then make sure to first check the Home Manager
+  # release notes.
+  home.stateVersion = "25.05"; # Please read the comment before changing.
+
+  nixpkgs.config.allowUnfree = true;
+
+  # The home.packages option allows you to install Nix packages into your
+  # environment.
+  home.packages = with pkgs; [
+    # # Adds the 'hello' command to your environment. It prints a friendly
+    # # "Hello, world!" when run.
+    # pkgs.hello
+
+    # # It is sometimes useful to fine-tune packages, for example, by applying
+    # # overrides. You can do that directly here, just don't forget the
+    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+    # # fonts?
+    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+
+    # # You can also create simple shell scripts directly inside your
+    # # configuration. For example, this adds a command 'my-hello' to your
+    # # environment:
+    # (pkgs.writeShellScriptBin "my-hello" ''
+    #   echo "Hello, ${config.home.username}!"
+    # '')
+    docker
+    docker-compose
+    docker-credential-helpers
+    ripgrep
+    jdk23
+    awscli2
+    gotools
+    golangci-lint
+  ];
+
+  # Home Manager is pretty good at managing dotfiles. The primary way to manage
+  # plain files is through 'home.file'.
+  home.file = {
+    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
+    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
+    # # symlink to the Nix store copy.
+    # ".screenrc".source = dotfiles/screenrc;
+
+    # # You can also set the file content immediately.
+    # ".gradle/gradle.properties".text = ''
+    #   org.gradle.console=verbose
+    #   org.gradle.daemon.idletimeout=3600000
+    # '';
+  };
+
+  # Home Manager can also manage your environment variables through
+  # 'home.sessionVariables'. These will be explicitly sourced when using a
+  # shell provided by Home Manager. If you don't want to manage your shell
+  # through Home Manager then you have to manually source 'hm-session-vars.sh'
+  # located at either
+  #
+  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+  #
+  # or
+  #
+  #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
+  #
+  # or
+  #
+  #  /etc/profiles/per-user/qufei/etc/profile.d/hm-session-vars.sh
+  #
+
+  home.sessionVariables = {
+    EDITOR = "nvim";
+  };
+
+  
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
+  # Zsh
+  programs.zsh = {
+    enable = true;
+    initContent = ''
+      export CLICOLOR=1
+      export LSCOLORS=GxFxCxDxBxegedabagaced
+
+      path+=("$HOME/.local/bin")
+
+      # zsh-vi-mode
+      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+      ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+      ZVM_CURSOR_STYLE_ENABLED=false
+
+      bindkey '^E' autosuggest-accept
+
+      alias ls='ls -GFh'
+      alias hm-switch='home-manager switch'
+      alias hm-editor="nvim $HOME/.config/home-manager/home.nix"
+    '';
+    autosuggestion.enable = true;
+    syntaxHighlighting = {
+      enable = true;
+      highlighters = [ "main" "brackets" "pattern" "cursor" ];
+    };
+  };
+
+  # Neovim
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    extraConfig =
+    ''
+      set relativenumber
+      set clipboard=unnamedplus
+    '';
+    coc = {
+      enable = true;
+      settings = {
+        "suggest.noselect" = true;
+        "suggest.enablePreview" = true;
+        "suggest.enablePreselect" = false;
+        "suggest.disableKind" = true;
+        languageserver = {
+          haskell = {
+            command = "haskell-language-server-wrapper";
+            args = [ "--lsp" ];
+            rootPatterns = [
+              "*.cabal"
+              "stack.yaml"
+              "cabal.project"
+              "package.yaml"
+              "hie.yaml"
+            ];
+            filetypes = [ "haskell" "lhaskell" ];
+          };
+        };
+      };
+    };
+  };
+
+  # Fzf
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  # Git
+  programs.git = {
+    enable = true;
+    settings = {
+      init.defaultBranch = "main";
+
+      user = {
+	email = "qufei.wang@zimpler.com";
+	name = "qufei";
+      };
+
+      core = {
+	editor = "nvim";
+      };
+
+      pull = {
+	rebase = true;
+      };
+
+      url = {
+        "git@gitlab.tooling.zimpler.net:" = {
+          insteadOf = "https://gitlab.tooling.zimpler.net/";
+        };
+      };
+
+      alias = {
+        st = "status";
+        ci = "commit";
+        co = "checkout";
+        br = "branch";
+        lg = "log --oneline --graph --decorate";
+      };
+
+    };
+
+  };
+
+  # Tmux
+  programs.tmux = {
+    enable = true;
+    keyMode = "vi";
+    escapeTime = 50;
+    extraConfig =
+    ''
+      set -g default-terminal "tmux-256color"
+    '';
+  };
+
+  # Starship
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      add_newline = false;
+    };
+  };
+
+  # Go
+  programs.go = {
+    enable = true;
+    env = {
+      GOPRIVATE = [
+        "github.com/Zimpler/*"
+        "gitlab.zimpler.com/*"
+        "gitlab.tooling.zimpler.net/*"
+      ];
+    };
+  };
+}
