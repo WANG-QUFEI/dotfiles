@@ -4,7 +4,7 @@
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "qufei";
-  home.homeDirectory = "/Users/qufei";
+  home.homeDirectory = "/home/qufei";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -16,6 +16,8 @@
   home.stateVersion = "25.05"; # Please read the comment before changing.
 
   nixpkgs.config.allowUnfree = true;
+
+  fonts.fontconfig.enable = true;
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
@@ -36,6 +38,7 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
+    wl-clipboard
     docker
     docker-compose
     docker-credential-helpers
@@ -44,6 +47,13 @@
     awscli2
     gotools
     golangci-lint
+
+    nerd-fonts.code-new-roman
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.ubuntu-mono
+    nerd-fonts.ubuntu
+    maple-mono.NF
+    nerd-fonts.mononoki
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -90,9 +100,6 @@
   programs.zsh = {
     enable = true;
     initContent = ''
-      export CLICOLOR=1
-      export LSCOLORS=GxFxCxDxBxegedabagaced
-
       path+=("$HOME/.local/bin")
 
       # zsh-vi-mode
@@ -102,16 +109,24 @@
 
       bindkey '^E' autosuggest-accept
 
-      alias ls='ls -GFh'
-      alias hm-switch='home-manager switch'
-      alias hm-editor="nvim $HOME/.config/home-manager/home.nix"
+      alias ls='ls --color=auto'
+      alias hms='home-manager switch'
+      alias hme="nvim $HOME/.config/home-manager/home.nix"
+
+      # Set SSH_AUTH_SOCK for systemd-managed ssh-agent
+      if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+      fi
     '';
+
     autosuggestion.enable = true;
+
     syntaxHighlighting = {
       enable = true;
-      highlighters = [ "main" "brackets" "pattern" "cursor" ];
+      highlighters = [ "main" "brackets" "pattern" ];
     };
   };
+
 
   # Neovim
   programs.neovim = {
@@ -156,11 +171,20 @@
   # Git
   programs.git = {
     enable = true;
-    settings = {
+
+    aliases = {
+      st = "status";
+      ci = "commit";
+      co = "checkout";
+      br = "branch";
+      lg = "log --oneline --graph --decorate";
+    };
+
+    extraConfig = {
       init.defaultBranch = "main";
 
       user = {
-	email = "qufei.wang@zimpler.com";
+	email = "wangqufei2009@gmail.com";
 	name = "qufei";
       };
 
@@ -177,17 +201,7 @@
           insteadOf = "https://gitlab.tooling.zimpler.net/";
         };
       };
-
-      alias = {
-        st = "status";
-        ci = "commit";
-        co = "checkout";
-        br = "branch";
-        lg = "log --oneline --graph --decorate";
-      };
-
     };
-
   };
 
   # Tmux
@@ -213,12 +227,10 @@
   # Go
   programs.go = {
     enable = true;
-    env = {
-      GOPRIVATE = [
-        "github.com/Zimpler/*"
-        "gitlab.zimpler.com/*"
-        "gitlab.tooling.zimpler.net/*"
-      ];
-    };
+    goPrivate = [
+      "github.com/Zimpler/*"
+      "gitlab.zimpler.com/*"
+      "gitlab.tooling.zimpler.net/*"
+    ];
   };
 }
